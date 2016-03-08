@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        // Initialize Parse.
+        Parse.setApplicationId("Vr87cvps7sgNlJKjsUqciHaMmLlJ307YK6AMjC49",
+            clientKey: "Fsefm8jxy0IDbTuSuMbGDoN1eqkzXOq1JdqQSXTg")
+        
+        if (PFUser.currentUser() != nil){
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            print("there is a current user")
+            let vc = storyboard.instantiateViewControllerWithIdentifier("TabBarController")
+            window?.rootViewController = vc
+        }
+        else{
+            print("no current user")
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserverForName("userLoggedOut", object: nil, queue: NSOperationQueue.mainQueue()) { (NSNotification) -> Void in
+            //
+            let storyboard = UIStoryboard(name: "Main", bundle:nil)
+            let vc = storyboard.instantiateInitialViewController()
+            self.window?.rootViewController = vc
+        }
+        
+        
         return true
     }
 
